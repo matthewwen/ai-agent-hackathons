@@ -25,6 +25,10 @@ export default function Home() {
   }, [igTag])
 
   useEffect(() => {
+    console.log({posts});
+    if (stage !== 3) {
+      return
+    }
     // call endpoint -> set user preferences
     setLLMResponse("this is what we think about prompt")
   }, [posts])

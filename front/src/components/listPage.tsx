@@ -1,14 +1,16 @@
 "use client"
 
-import { Button } from "@mui/material";
 import Post from "./posts";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function ListPage(props: any) {
     const {query, posts, setPosts} = props;
     
     useEffect(() => {
-        setPosts([])
+        fetch("/api/google").then(async (res: Response) => {
+            const resJson = await res.json()
+            setPosts(resJson.places);
+        });
     }, [query])
 
     return (
@@ -19,6 +21,9 @@ export default function ListPage(props: any) {
                         <Post
                             key={`posts-${i}`}
                             item={item}
+                            items={posts}
+                            setItems={setPosts}
+                            idx={i}
                         />
                     ))
                 }
