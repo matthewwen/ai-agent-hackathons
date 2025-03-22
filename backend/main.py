@@ -4,6 +4,7 @@ import os
 from apify_client import ApifyClient
 from typing import Dict, Any, List
 from instagram_analysis import analyze_instagram_posts
+from restaurant_recommendations import get_restaurant_recommendations
 
 app = FastAPI()
 
@@ -119,3 +120,83 @@ def analyze_test_data(output_file: str = "analysis_output.json"):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error analyzing test data: {str(e)}")
+
+
+@app.get("/instagram/{username}/restaurant-recommendations")
+def get_restaurant_recommendations_for_user(username: str):
+    """
+    Generate restaurant recommendations based on Instagram user analysis.
+    
+    Args:
+        username: Instagram username to analyze
+        
+    Returns:
+        JSON response with restaurant recommendations
+    """
+    try:
+        # First get the Instagram analysis
+        analysis_response = analyze_instagram_user(username)
+        analysis = analysis_response.get("analysis", "")
+        
+        # Generate restaurant recommendations based on the analysis
+        recommendations = get_restaurant_recommendations(analysis)
+        
+        return {
+            "username": username,
+            "recommendations": recommendations
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating restaurant recommendations: {str(e)}")
+
+
+@app.post("/restaurant-recommendations")
+def get_recommendations_from_analysis(analysis: str):
+    """
+    Generate restaurant recommendations based on provided customer profile analysis.
+    
+    Args:
+        analysis: Customer profile analysis string
+        
+    Returns:
+        JSON response with restaurant recommendations
+    """
+    try:
+        # Generate restaurant recommendations based on the analysis
+        recommendations = get_restaurant_recommendations(analysis)
+        
+        return {
+            "recommendations": recommendations
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating restaurant recommendations: {str(e)}")
+
+
+@app.post("/restaurant-recommendations/from-file")
+def get_recommendations_from_file(analysis_file: str = "analysis_output.json"):
+    """
+    Generate restaurant recommendations based on analysis from a file.
+    
+    Args:
+        analysis_file: Path to the analysis JSON file
+        
+    Returns:
+        JSON response with restaurant recommendations
+    """
+    try:
+        import json
+        
+        # Load analysis from file
+        with open(analysis_file, "r") as f:
+            data = json.load(f)
+        
+        analysis = data.get("analysis", "")
+        
+        # Generate restaurant recommendations based on the analysis
+        recommendations = get_restaurant_recommendations(analysis)
+        
+        return {
+            "recommendations": recommendations,
+            "analysis_file": analysis_file
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error generating restaurant recommendations from file: {str(e)}")
