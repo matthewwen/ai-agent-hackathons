@@ -2,3 +2,7 @@ fastapi
 uvicorn[standard]
 launchdarkly-server-sdk
 apify-client
+google-generativeai
+Pillow
+requests
+python-dotenv

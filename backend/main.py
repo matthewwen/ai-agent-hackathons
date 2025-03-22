@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 import os
 from apify_client import ApifyClient
 from typing import Dict, Any, List
+from instagram_analysis import analyze_instagram_posts
 
 app = FastAPI()
 
@@ -62,3 +63,58 @@ def get_instagram_data(username: str):
         return {"username": username, "data": results}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error fetching Instagram data: {str(e)}")
+
+
+@app.get("/instagram/{username}/analysis")
+def analyze_instagram_user(username: str):
+    """
+    Analyze Instagram user posts using Gemini Vision API.
+    
+    Args:
+        username: Instagram username to analyze
+        
+    Returns:
+        JSON response with analysis results
+    """
+    try:
+        # First get the Instagram data
+        instagram_data = get_instagram_data(username)
+        
+        # Analyze the posts using Gemini
+        analysis_result = analyze_instagram_posts(instagram_data)
+        
+        return {
+            "username": username,
+            "analysis": analysis_result
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error analyzing Instagram data: {str(e)}")
+
+
+@app.post("/instagram/analyze-test-data")
+def analyze_test_data(output_file: str = "analysis_output.json"):
+    """
+    Analyze test Instagram data from ig_test_data.json using Gemini Vision API.
+    
+    Args:
+        output_file: Path to save the analysis output as JSON
+    
+    Returns:
+        JSON response with analysis results
+    """
+    try:
+        import json
+        
+        # Load test data
+        with open("ig_test_data.json", "r") as f:
+            test_data = json.load(f)
+        
+        # Analyze the posts using Gemini and save to file
+        analysis_result = analyze_instagram_posts(test_data, save_to_file=True, output_file=output_file)
+        
+        return {
+            "analysis": analysis_result,
+            "output_file": output_file
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error analyzing test data: {str(e)}")
