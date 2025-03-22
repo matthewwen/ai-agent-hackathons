@@ -12,9 +12,10 @@ ALLOWED_IP = "10.214.209.4"
 async def check_ip_address(request: Request, call_next):
     client_ip = request.client.host
     is_production  = os.getenv("PRODUCTION", "false") == "true"
+    print(client_ip, is_production)
 
-    if is_production and client_ip != ALLOWED_IP:
-        raise HTTPException(status_code=403, detail="Forbidden: Access denied")
+    #if is_production and client_ip != ALLOWED_IP:
+        #raise HTTPException(status_code=403, detail="Forbidden: Access denied")
 
     response = await call_next(request)
     return response
