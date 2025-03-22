@@ -18,10 +18,18 @@ export default function Home() {
   }
 
   useEffect(() => {
-    console.log({posts});
-    if (stage !== 3) {
+    if (stage !== 2) {
       return
     }
+    fetch("https://ai-agent-hackathons.onrender.com/rewrite", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        responses: posts.recommendations,
+      })
+    })
     // call endpoint -> set user preferences
     setLLMResponse("this is what we think about prompt")
   }, [posts])
@@ -35,10 +43,11 @@ export default function Home() {
         </Button>
         <div style={{flex: 1}}/>
         {
-          stage === 1 && 
+          stage === 1 && posts && 
           <Button 
             variant="contained" 
             onClick={() => {
+              console.log("setStage", stage)
               setStage(2)
             }}>
               Submit

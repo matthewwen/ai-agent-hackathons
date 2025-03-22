@@ -12,9 +12,9 @@ export default function Post(props: any) {
     useEffect(() => {
         const clone = structuredClone(item);
         clone["preference"] = preference
-        const newList = [...items];
-        newList[idx] = clone;
-        setItems(newList);
+        const newItems = {...items};
+        newItems["places"][idx] = clone;
+        setItems(newItems);
     }, [preference])
     
     return (

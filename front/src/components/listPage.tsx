@@ -5,6 +5,7 @@ import { useEffect } from "react";
 
 export default function ListPage(props: any) {
     const {posts, setPosts, igTag} = props;
+    console.log({posts})
     
     useEffect(() => {
         fetch("/api/google",  {
@@ -15,7 +16,7 @@ export default function ListPage(props: any) {
             body: JSON.stringify({igTag: igTag,})}
         ).then(async (res: Response) => {
             const resJson = await res.json()
-            setPosts(resJson.places);
+            setPosts(resJson);
         });
     }, [igTag])
 
@@ -23,7 +24,7 @@ export default function ListPage(props: any) {
         <div>
             <div style={{display: "flex", flexWrap: "wrap"}}>
                 {
-                    posts === undefined ? <div>Loading....</div> : posts.map((item: any, i: number) => (
+                    posts === undefined ? <div>Loading....</div> : posts.places.map((item: any, i: number) => (
                         <Post
                             key={`posts-${i}`}
                             item={item}
