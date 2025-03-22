@@ -200,3 +200,37 @@ def get_recommendations_from_file(analysis_file: str = "analysis_output.json"):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating restaurant recommendations from file: {str(e)}")
+
+
+@app.get("/instagram/{username}/full-service")
+def full_service_recommendations(username: str, save_outputs: bool = True, output_dir: str = "outputs"):
+    """
+    Complete service that fetches Instagram data, analyzes it, and generates restaurant recommendations.
+    All in one endpoint that connects all services.
+    
+    Args:
+        username: Instagram username to analyze
+        save_outputs: Whether to save intermediate and final outputs to files
+        output_dir: Directory to save output files
+        
+    Returns:
+        JSON response with restaurant recommendations and paths to output files
+    """
+    try:
+        # Import here to avoid circular imports
+        from instagram_restaurant_service import get_recommendations_from_instagram
+        
+        # Use the integrated service to get recommendations
+        recommendations, output_files = get_recommendations_from_instagram(
+            username=username,
+            save_outputs=save_outputs,
+            output_dir=output_dir
+        )
+        
+        return {
+            "username": username,
+            "recommendations": recommendations,
+            "output_files": output_files
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error in full service recommendations: {str(e)}")
