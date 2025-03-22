@@ -8,21 +8,14 @@ import { Button } from "@mui/material";
 export default function Home() {
   const [stage, setStage] = useState(0)
   const [igTag, setIgTag] = useState<any>(undefined);
-  const [query, setQuery] = useState<any[]>([])
   const [posts, setPosts] = useState<any>(undefined);
   const [llmResponse, setLLMResponse] = useState<any>(undefined);
 
   const onReset = () => {
     setStage(0);
     setIgTag(undefined);
-    setQuery([])
     setPosts(undefined);
   }
-
-  useEffect(() => {
-    // call endpoint -> given ig tag
-    setQuery(["healthy", "chinese"])
-  }, [igTag])
 
   useEffect(() => {
     console.log({posts});
@@ -61,7 +54,7 @@ export default function Home() {
         }
         {stage === 1 && 
           <ListPage
-            query={query}
+            igTag={igTag}
             posts={posts}
             setPosts={setPosts}
           />

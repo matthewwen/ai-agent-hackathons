@@ -1,22 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { describe } from "node:test";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const igTag = req.body["igTag"]
+  const response = await fetch(`https://ai-agent-hackathons.onrender.com/instagram/${igTag}/full-service`);
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status}`);
+  }
+  const data = await response.json();
+  console.log('Received data from backend:', data);
+
   res.status(200).json({
-    places: [
-      {
-        restaurant_name: "New England Lobster",
-        restaurant_location: "Milbrae",
-        restaurant_description: "Servers Any Food with Lobster. Not that expensive, pretty good."
-      },
-      {
-        restaurant_name: "Brendas French Soul Food",
-        restaurant_location: "Lower Nob Hill",
-        restaurant_description: "Serves Good"
-      }
-    ]
+    places: data.recommendations
   })
 
 }
 
-  
