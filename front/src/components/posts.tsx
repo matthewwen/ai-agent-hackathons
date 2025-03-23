@@ -12,18 +12,20 @@ export default function Post(props: any) {
     useEffect(() => {
         const clone = structuredClone(item);
         clone["preference"] = preference
-        const newItems = {...items};
+        const newItems = { ...items };
         newItems["recommendations"][idx] = clone;
         setItems(newItems);
     }, [preference])
-    
+
+
+
     return (
         <Card sx={{ width: 275, margin: 1 }}>
-            <CardContent sx={{height: 200, overflow: "scroll"}}>
+            <CardContent sx={{ height: 200, overflow: "scroll" }}>
                 <Typography gutterBottom sx={{ fontSize: 15 }}>
                     {item.restaurant_name}
                 </Typography>
-                <Typography variant="body2" sx={{color: 'text.secondary'}}>
+                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                     {item.restaurant_location}
                 </Typography>
                 <Typography variant="body2">
@@ -32,30 +34,34 @@ export default function Post(props: any) {
             </CardContent>
             <CardActions>
                 <div style={{
-                    backgroundColor: preference === "dislike" ? "#F44": undefined, 
-                    borderRadius: "100%", 
+                    backgroundColor: preference === "dislike" ? "#F44" : undefined,
+                    borderRadius: "100%",
                     width: 30,
                     height: 30,
-                    textAlign: "center"}}
+                    textAlign: "center"
+                }}
                     onClick={() => {
                         setPreference("dislike")
                     }}
                 >
-                    <ThumbDownAltIcon/>
+                    <ThumbDownAltIcon />
                 </div>
                 <div style={{
-                    backgroundColor: preference === "like" ? "#4F4": undefined,
+                    backgroundColor: preference === "like" ? "#4F4" : undefined,
                     borderRadius: "100%",
                     width: 30,
                     height: 30,
-                    textAlign: "center"}}
+                    textAlign: "center"
+                }}
                     onClick={() => {
                         setPreference("like")
                     }}
                 >
-                    <ThumbUpAltIcon/>
+                    <ThumbUpAltIcon />
                 </div>
+
             </CardActions>
+
         </Card>
     )
 }

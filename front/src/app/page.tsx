@@ -22,18 +22,8 @@ export default function Home() {
       return
     }
     console.log({posts});
-    fetch("https://ai-agent-hackathons.onrender.com/rewrite", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(posts)
-    }).then(async (res: Response) => {
-      const resJson = await res.json()
-      console.log({resJson});
-      setLLMResponse(resJson["response"])
-    })
-    // call endpoint -> set user preferences
+    // We've moved the API call to the posts.tsx component with the Evaluate Prompt button
+    // This prevents duplicate API calls and gives the user more control
   }, [posts, stage])
 
 
