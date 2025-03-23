@@ -10,7 +10,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   console.log('Received data from backend:', data);
 
   res.status(200).json({
-    places: data.recommendations,
     ...data
   })
 

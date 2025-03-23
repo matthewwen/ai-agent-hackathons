@@ -13,7 +13,7 @@ export default function Post(props: any) {
         const clone = structuredClone(item);
         clone["preference"] = preference
         const newItems = {...items};
-        newItems["places"][idx] = clone;
+        newItems["recommendations"][idx] = clone;
         setItems(newItems);
     }, [preference])
     

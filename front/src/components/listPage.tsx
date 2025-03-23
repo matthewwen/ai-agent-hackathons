@@ -5,9 +5,11 @@ import { useEffect } from "react";
 
 export default function ListPage(props: any) {
     const {posts, setPosts, igTag} = props;
-    console.log({posts})
     
     useEffect(() => {
+        if (posts !== undefined) {
+            return;
+        }
         fetch("/api/google",  {
             method: 'POST',
             headers: {
@@ -24,7 +26,7 @@ export default function ListPage(props: any) {
         <div>
             <div style={{display: "flex", flexWrap: "wrap"}}>
                 {
-                    posts === undefined ? <div>Loading....</div> : posts.places.map((item: any, i: number) => (
+                    posts === undefined ? <div>Loading....</div> : posts.recommendations.map((item: any, i: number) => (
                         <Post
                             key={`posts-${i}`}
                             item={item}

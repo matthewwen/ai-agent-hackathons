@@ -21,18 +21,20 @@ export default function Home() {
     if (stage !== 2) {
       return
     }
+    console.log({posts});
     fetch("https://ai-agent-hackathons.onrender.com/rewrite", {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        responses: posts.recommendations,
-      })
+      body: JSON.stringify(posts)
+    }).then(async (res: Response) => {
+      const resJson = await res.json()
+      console.log({resJson});
+      setLLMResponse(resJson["response"])
     })
     // call endpoint -> set user preferences
-    setLLMResponse("this is what we think about prompt")
-  }, [posts])
+  }, [posts, stage])
 
 
   return (
@@ -41,7 +43,11 @@ export default function Home() {
         <Button variant="contained" 
           onClick={onReset}>Reset
         </Button>
-        <div style={{flex: 1}}/>
+        <div style={{flex: 1, marginLeft: 10}}>
+          {igTag && <a href={`https://www.instagram.com/${igTag}`} target="_blank" rel="noopener noreferrer" >
+            @{igTag}
+          </a>}
+        </div>
         {
           stage === 1 && posts && 
           <Button 
